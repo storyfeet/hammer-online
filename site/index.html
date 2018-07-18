@@ -1,0 +1,54 @@
+<!DOCTYPE = html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Muppets</title>
+    </head>
+    <body>
+        <h1>Hello Muppets</h1>
+
+        <form id="f1">
+            <input type="text" name="said"/>
+            <input type="submit"/>
+        </form>
+
+    <script>
+
+function formdata(f){
+    let res = {};
+    for (p in f.children){
+        elem = f.children[p];
+        console.log(elem.nodeName);
+        if (elem.nodeName !== "INPUT") continue;
+        if (elem.type == "submit") continue;
+        res[elem.name]=elem.value;
+        console.log("V = "+elem.name + " "  + elem.value);
+    }
+    return res;
+}
+
+let f1 = document.getElementById("f1");
+f1.onsubmit= function(e){
+
+    data = formdata(f1);
+    console.log(data);
+    fetch("/say",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(data)
+    }).then(response => response.json())
+        .catch(e=>console.log("Hello Error:"+ e))
+        .then(res=> console.log(res));
+    return false;
+
+
+}
+
+
+    </script>
+
+
+    </body>
+</html>
