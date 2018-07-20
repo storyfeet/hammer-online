@@ -3,12 +3,26 @@
     <head>
         <meta charset="utf-8">
         <title>The Shoehorn Circle</title>
+<style>
+form {
+    border:3px solid black;
+    padding:5px;
+}
+</style>
     </head>
     <body>
         <form action="login" method="POST">
             <input name="username" type="text"/>
+            <input name="password" type="text"/>
             <input type="submit" value="Login">
         </form>
+
+        <form action="new-user" method="POST">
+            <input name="username" type="text"/>
+            <input name="password" type="text"/>
+            <input type="submit" value="New User">
+        </form>
+
 
     </body>
 </html>

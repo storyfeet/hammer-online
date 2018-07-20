@@ -3,6 +3,7 @@
 
 extern crate rand;
 extern crate rocket;
+extern crate sqlite;
 #[macro_use] extern crate rocket_contrib; //Consider #[macro_use]
 
 #[macro_use] extern crate serde_derive;
@@ -39,15 +40,38 @@ fn index()->io::Result<NamedFile>{
 
 #[post("/login", data="<user>")]
 fn login(user:Form<login::User>,state:State<Session>,mut cookies:Cookies)->io::Result<NamedFile>{
+
     let s = state.inner();
     let user = user.into_inner();
-    let uid = s.add_user(user);
 
+    println!("Login happening");
+    if ! user.pwcheck(){
+        return NamedFile::open("site/no-login.html");
+    }
+
+    let uid = s.add_user(user);
     cookies.add(Cookie::new("user_id",uid.to_string()));
 
     NamedFile::open("site/home.html")
 }
 
+#[post("/new-user",data="<user>")]
+fn new_user(user:Form<login::User>,state:State<Session>,mut cookies:Cookies)->io::Result<NamedFile>{
+    //make sure can add user to db
+    let user = user.into_inner(); 
+    if let Err(e) = user.dbnew(){
+        println!("{}",e);
+        return NamedFile::open("no-login");
+    }
+
+    //create session for use
+    let s = state.inner();
+    let uid = s.add_user(user);
+    cookies.add(Cookie::new("user_id",uid.to_string()));
+
+    NamedFile::open("site/home.html")
+    
+}
 
 
 #[post("/say", data="<sayer>")]
@@ -68,7 +92,7 @@ fn say(sayer:Json<Sayer>,state:State<Session>,cookies:Cookies)->Option<Json<Resp
 }
 
 fn main() {
-    rocket::ignite().mount("/",routes![index,say,login])
+    rocket::ignite().mount("/",routes![index,say,login,new_user])
         .manage(Mutex::new("Hello".to_string()))
         .manage(Session::new())
         .launch();

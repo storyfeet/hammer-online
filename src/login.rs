@@ -3,11 +3,45 @@ use std::sync::Mutex;
 
 use rand::random;
 
+use sqlite;
+
+const USER_DB:&str = "dbase/users.db";
 
 #[derive(Clone,PartialEq,Debug,Deserialize,FromForm)]
 pub struct User {
     pub username:String,
-    
+    password:String,
+}
+
+impl User{
+    pub fn dbnew(&self)->Result<(),String>{
+        let conn = sqlite::open(USER_DB).expect("Could not open USER_DB");
+        match conn.execute(format!("insert into users (username,password) values ('{}','{}' );",self.username,self.password)){
+            Ok(_)=>Ok(()),
+            Err(e)=>{
+                println!("User already exists");
+                Err(format!("Could not add user: {}",e))
+            }
+        }
+    }
+
+    pub fn pwcheck(&self)->bool{
+        let conn= sqlite::open(USER_DB).expect("Could not open USER_DB for pwcheck");
+        let mut res = false;
+        conn.iterate(format!("select * from users where username = '{}';", self.username),|pairs|{
+            for &(k,v) in pairs.iter(){
+                println!("{} = {:?}",k,v);
+                match k {
+                    "password"=>res =( v==Some(&self.password)),
+                    _=>{},
+                }
+            }
+            true
+        }).expect("Coult not read db in pwcheck");
+        return res;
+        
+    }
+
 }
 
 pub struct Session{
