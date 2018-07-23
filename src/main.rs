@@ -4,6 +4,7 @@
 extern crate rand;
 extern crate rocket;
 extern crate sqlite;
+extern crate bcrypt;
 #[macro_use] extern crate rocket_contrib; //Consider #[macro_use]
 
 #[macro_use] extern crate serde_derive;
@@ -18,7 +19,7 @@ use std::io;
 use std::sync::Mutex;
 
 mod login;
-use login::{Session,User};
+use login::{Session,DbUser,Cred};
 
 
 #[derive(Deserialize)]
@@ -38,31 +39,35 @@ fn index()->io::Result<NamedFile>{
 }
 
 
-#[post("/login", data="<user>")]
-fn login(user:Form<login::User>,state:State<Session>,mut cookies:Cookies)->io::Result<NamedFile>{
+#[post("/login", data="<cred>")]
+fn login(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->io::Result<NamedFile>{
 
     let s = state.inner();
-    let user = user.into_inner();
+    let cred = cred.into_inner();
 
     println!("Login happening");
-    if ! user.pwcheck(){
-        return NamedFile::open("site/no-login.html");
-    }
+    let uid = match DbUser::get(cred){
+        Ok(u)=> s.add_user(u),
+        _=> return NamedFile::open("site/no-login.html"),
+    };
 
-    let uid = s.add_user(user);
     cookies.add(Cookie::new("user_id",uid.to_string()));
 
     NamedFile::open("site/home.html")
 }
 
-#[post("/new-user",data="<user>")]
-fn new_user(user:Form<login::User>,state:State<Session>,mut cookies:Cookies)->io::Result<NamedFile>{
+#[post("/new-user",data="<cred>")]
+fn new_user(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->io::Result<NamedFile>{
     //make sure can add user to db
-    let user = user.into_inner(); 
-    if let Err(e) = user.dbnew(){
-        println!("{}",e);
-        return NamedFile::open("no-login");
-    }
+    let cred = cred.into_inner(); 
+
+    let user = match DbUser::new(cred){
+        Ok(u)=>u,
+        Err(e)=>{
+            println!("Login Error :{}",e);
+            return NamedFile::open("site/no-login.html");
+        },
+    };
 
     //create session for use
     let s = state.inner();
