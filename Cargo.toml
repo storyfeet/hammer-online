@@ -1,5 +1,5 @@
 [package]
-name = "hammer-online"
+name = "Shoehorn-Server"
 version = "0.1.0"
 authors = ["storyfeet <thebeaky@psmail.net>"]
 
@@ -13,4 +13,6 @@ serde_json = "1.0"
 rand = "0.5.4"
 sqlite = "0.23.9"
 bcrypt = "0.2.0"
+
+card_deck = "*"
 

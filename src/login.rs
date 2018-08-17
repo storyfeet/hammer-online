@@ -95,10 +95,10 @@ mod tests{
     #[test]
     fn test_add_users(){
         let sess = Session::new(); 
-        let daveid = sess.add_user(User{username:"dave".to_string()});
-        let _peteid = sess.add_user(User{username:"pete".to_string()});
+        let daveid = sess.add_user(DbUser{username:"dave".to_string()});
+        let _peteid = sess.add_user(DbUser{username:"pete".to_string()});
 
-        assert_eq!(sess.get_user(daveid),Some(User{username:"dave".to_string()}));
+        assert_eq!(sess.get_user(daveid),Some(DbUser{username:"dave".to_string()}));
     }
 }
 

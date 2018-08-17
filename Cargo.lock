@@ -1,4 +1,20 @@
 [[package]]
+name = "Shoehorn-Server"
+version = "0.1.0"
+dependencies = [
+ "bcrypt 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "card_deck 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.5.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rocket 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rocket_codegen 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rocket_contrib 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_derive 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.24 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sqlite 0.23.9 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "arrayvec"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -68,6 +84,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "byteorder"
 version = "1.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "card_deck"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "rand 0.5.4 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "cc"
@@ -159,21 +183,6 @@ version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "typenum 1.10.0 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "hammer-online"
-version = "0.1.0"
-dependencies = [
- "bcrypt 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "rand 0.5.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "rocket 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "rocket_codegen 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "rocket_contrib 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_derive 1.0.70 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_json 1.0.24 (registry+https://github.com/rust-lang/crates.io-index)",
- "sqlite 0.23.9 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -669,6 +678,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum blowfish 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "95ede07672d9f4144c578439aa352604ec5c67a80c940fe8d382ddbeeeb3c6d8"
 "checksum byte-tools 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "560c32574a12a89ecd91f5e742165893f86e3ab98d21f8ea548658eb9eef5f40"
 "checksum byteorder 1.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "74c0b906e9446b0a2e4f760cdb3fa4b2c48cdc6db8766a845c54b6ff063fd2e9"
+"checksum card_deck 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "753b89d9f958aec3f1e2436bbe2e6ca1905cb40656a983b3b1939e1ae009a1bc"
 "checksum cc 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)" = "2119ea4867bd2b8ed3aecab467709720b2d55b1bcfe09f772fd68066eaf15275"
 "checksum cfg-if 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)" = "efe5c877e17a9c717a0bf3613b2709f723202c4e4675cc8f12926ded29bcb17e"
 "checksum cloudabi 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)" = "ddfc5b9aa5d4507acaf872de71051dfd0e309860e88966e1051e462a077aac4f"

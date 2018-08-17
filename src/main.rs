@@ -1,6 +1,7 @@
 #![feature(plugin, decl_macro,custom_derive)]
 #![plugin(rocket_codegen)]
 
+extern crate card_deck;
 extern crate rand;
 extern crate rocket;
 extern crate sqlite;
