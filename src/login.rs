@@ -37,22 +37,22 @@ impl DbUser{
         Ok(DbUser{username:c.username})
     }
 
-    pub fn get(c:Cred)->Result<DbUser,String>{    
-        let conn= sqlite::open(USER_DB).expect("Could not open USER_DB for pwcheck");
-        let mut res = Err("Not found".to_string());
+    pub fn get(c:Cred)->Result<DbUser,SCServerErr>{    
+        let conn= sqlite::open(USER_DB)?;
 
-        let mut st = conn.prepare("select username, password from users where username = ?;").expect("Error preparing user read statement");
+        let mut st = conn.prepare("select username, password from users where username = ?;")?;
 
-        st.bind(1,&c.username as &str); 
+        st.bind(1,&c.username as &str)?; 
 
         if let Ok(State::Row) = st.next(){
-            let phash = st.read::<String>(1).expect("Unable to read pw row in Dbase");
-            res = match verify(&c.password,&phash) {
+            let phash = st.read::<String>(1)?;
+
+            return match verify(&c.password,&phash) {
                 Ok(true)=>Ok(DbUser{username:c.username.clone()}),
-                _ => Err("Password doesn't match".to_string()),
+                _ => Err(SCServerErr::PasswordFail),
             }
         }
-        return res;
+        Err(SCServerErr::NotFound)
     }
 
 }

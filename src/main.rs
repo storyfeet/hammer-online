@@ -23,7 +23,7 @@ mod login;
 use login::{Session,DbUser,Cred};
 
 mod scs_error;
-use scs_error::SCServerErr;
+//use scs_error::SCServerErr;
 
 
 #[derive(Deserialize)]
@@ -79,7 +79,6 @@ fn new_user(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->io::Resul
     cookies.add(Cookie::new("user_id",uid.to_string()));
 
     NamedFile::open("site/home.html")
-    
 }
 
 

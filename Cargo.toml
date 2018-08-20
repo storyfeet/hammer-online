@@ -1,5 +1,5 @@
 [package]
-name = "Shoehorn-Server"
+name = "shoehorn_server"
 version = "0.1.0"
 authors = ["storyfeet <thebeaky@psmail.net>"]
 

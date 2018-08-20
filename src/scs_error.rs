@@ -8,6 +8,8 @@ use bcrypt::BcryptError;
 pub enum SCServerErr {
     DbErr(sqlite::Error),
     HashErr(BcryptError),
+    NotFound,
+    PasswordFail,
 }
 
 impl From<sqlite::Error> for SCServerErr {
