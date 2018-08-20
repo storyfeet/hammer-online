@@ -1,11 +1,14 @@
 use std::collections::HashMap;
 use std::sync::Mutex;
 
-use bcrypt::{DEFAULT_COST,hash,verify};
+use bcrypt::{hash,verify};
 use rand::random;
 
 use sqlite;
 use sqlite::State;
+
+use scs_error::SCServerErr;
+
 
 const USER_DB:&str = "dbase/users.db";
 
@@ -22,22 +25,16 @@ pub struct DbUser {
 
 
 impl DbUser{
-    pub fn new(c:Cred)->Result<DbUser,String>{
+    pub fn new(c:Cred)->Result<DbUser,SCServerErr>{
         let conn = sqlite::open(USER_DB).expect("Could not open USER_DB");
-        let hpass = match hash(&c.password,10){
-            Ok(s)=>s,
-            Err(e)=>return Err(format!("{}",e)),
-        };
+        let hpass = hash(&c.password,10)?;
         let mut st = conn.prepare("insert into users (username,password) values ( ? , ?)").unwrap();
-        st.bind(1,&c.username as &str);
-        st.bind(2,&hpass as &str);
-        match st.next(){
-            Ok(_)=>Ok(DbUser{username:c.username}),
-            Err(e)=>{
-                println!("User already exists");
-                Err(format!("Could not add user: {}",e))
-            }
-        }
+        st.bind(1,&c.username as &str)?;
+        st.bind(2,&hpass as &str)?;
+
+        st.next()?;//next put I guess
+
+        Ok(DbUser{username:c.username})
     }
 
     pub fn get(c:Cred)->Result<DbUser,String>{    

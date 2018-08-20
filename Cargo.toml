@@ -14,5 +14,7 @@ rand = "0.5.4"
 sqlite = "0.23.9"
 bcrypt = "0.2.0"
 
-card_deck = "*"
+card_deck = {path="../../mlibs/card_deck/"} 
+arc_map = {path="../../mlibs/arc_map/"}
+
 

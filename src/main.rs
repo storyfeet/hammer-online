@@ -6,7 +6,7 @@ extern crate rand;
 extern crate rocket;
 extern crate sqlite;
 extern crate bcrypt;
-#[macro_use] extern crate rocket_contrib; //Consider #[macro_use]
+extern crate rocket_contrib; //Consider #[macro_use]
 
 #[macro_use] extern crate serde_derive;
 
@@ -21,6 +21,9 @@ use std::sync::Mutex;
 
 mod login;
 use login::{Session,DbUser,Cred};
+
+mod scs_error;
+use scs_error::SCServerErr;
 
 
 #[derive(Deserialize)]
@@ -65,7 +68,7 @@ fn new_user(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->io::Resul
     let user = match DbUser::new(cred){
         Ok(u)=>u,
         Err(e)=>{
-            println!("Login Error :{}",e);
+            println!("Login Error :{:?}",e);
             return NamedFile::open("site/no-login.html");
         },
     };
