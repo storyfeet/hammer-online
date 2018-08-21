@@ -57,21 +57,17 @@ impl DbUser{
 
 }
 
-pub struct Session{
-    users:Mutex<HashMap<u64,DbUser>>,
-}
+pub struct Logins(Mutex<HashMap<u64,DbUser>>);
 
-impl Session{
+impl Logins{
     pub fn new()->Self{
-        Session{
-            users:Mutex::new(HashMap::new()),
-        }
+        Logins(Mutex::new(HashMap::new()))
     }
 
     pub fn add_user(&self, user:DbUser)->u64{
         loop {
             let n:u64= random();
-            let mut map = self.users.lock().unwrap();
+            let mut map = self.0.lock().unwrap();//TODO Fix Error
             if let Some(_) = map.get(&n) {continue;}
 
             map.insert(n,user);
@@ -80,7 +76,7 @@ impl Session{
     }
 
     pub fn get_user(&self,id:u64)->Option<DbUser>{ 
-        let map = self.users.lock().unwrap();
+        let map = self.0.lock().unwrap();
         map.get(&id).map(|x| (x).clone())
     }
 }

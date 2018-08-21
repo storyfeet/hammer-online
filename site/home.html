@@ -32,12 +32,12 @@ f1.onsubmit= function(e){
 
     data = formdata(f1);
     console.log(data);
-    fetch("/say",{
+    fetch("/new_game",{
         method:"POST",
         headers:{
             "Content-Type":"application/json"
         },
-        body:JSON.stringify(data)
+        body:JSON.stringify(data.said)
     }).then(response => response.json())
         .catch(e=>console.log("Hello Error:"+ e))
         .then(res=> console.log(res));

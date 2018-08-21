@@ -20,22 +20,17 @@ use std::io;
 use std::sync::Mutex;
 
 mod login;
-use login::{Session,DbUser,Cred};
+use login::{DbUser,Cred};
+mod session;
+use session::Session;
 
 mod scs_error;
 //use scs_error::SCServerErr;
 
+mod pre_game;
 
-#[derive(Deserialize)]
-struct Sayer {
-    said:String,
-}
 
-#[derive(Serialize)]
-struct Response{
-    reply:String,
-    total:String,
-}
+
 
 #[get("/")]
 fn index()->io::Result<NamedFile>{
@@ -51,7 +46,7 @@ fn login(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->io::Result<N
 
     println!("Login happening");
     let uid = match DbUser::get(cred){
-        Ok(u)=> s.add_user(u),
+        Ok(u)=> s.logins.add_user(u),
         _=> return NamedFile::open("site/no-login.html"),
     };
 
@@ -75,32 +70,16 @@ fn new_user(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->io::Resul
 
     //create session for use
     let s = state.inner();
-    let uid = s.add_user(user);
+    let uid = s.logins.add_user(user);
     cookies.add(Cookie::new("user_id",uid.to_string()));
 
     NamedFile::open("site/home.html")
 }
 
 
-#[post("/say", data="<sayer>")]
-fn say(sayer:Json<Sayer>,state:State<Session>,cookies:Cookies)->Option<Json<Response>>{
-
-    let sess = state.inner();
-
-    let uid:u64 = cookies.get("user_id")?.value().parse().ok()?;
-
-    let user = sess.get_user(uid)?;
-
-
-    Some(Json(Response{
-        reply:format!("{} said: {}",user.username,sayer.said.to_string()),
-        total:"".to_string(),
-    }))
-
-}
 
 fn main() {
-    rocket::ignite().mount("/",routes![index,say,login,new_user])
+    rocket::ignite().mount("/",routes![index,pre_game::new_game,login,new_user])
         .manage(Mutex::new("Hello".to_string()))
         .manage(Session::new())
         .launch();
