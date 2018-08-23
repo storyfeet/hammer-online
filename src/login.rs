@@ -87,7 +87,7 @@ mod tests{
     use login::*;
     #[test]
     fn test_add_users(){
-        let sess = Session::new(); 
+        let sess = Logins::new(); 
         let daveid = sess.add_user(DbUser{username:"dave".to_string()});
         let _peteid = sess.add_user(DbUser{username:"pete".to_string()});
 
