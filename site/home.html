@@ -5,12 +5,14 @@
         <title>Muppets</title>
     </head>
     <body>
-        <h1>Hello Muppets</h1>
+        <h1>Join a Game</h1>
 
         <form id="f1">
             <input type="text" name="said"/>
-            <input type="submit"/>
+            <input type="submit" value="Join Game"/>
         </form>
+        <div id="gamelist">
+        </div>
 
     <script>
 
@@ -32,7 +34,7 @@ f1.onsubmit= function(e){
 
     data = formdata(f1);
     console.log(data);
-    fetch("/new_game",{
+    fetch("/join_game",{
         method:"POST",
         headers:{
             "Content-Type":"application/json"
@@ -40,11 +42,44 @@ f1.onsubmit= function(e){
         body:JSON.stringify(data.said)
     }).then(response => response.json())
         .catch(e=>console.log("Hello Error:"+ e))
-        .then(res=> console.log(res));
+        .then(res=> showData(res));
     return false;
-
-
 }
+
+function showData(d){
+    let gameList = document.getElementById("gamelist");
+    gameList.innerHTML = "";
+    for( p in d){
+        let gm = d[p];
+        let gbox = document.createElement("div"); 
+        let nm = document.createTextNode(gm.name+":");
+        gbox.appendChild(nm);
+
+        for (q in gm.players){
+            let pname = gm.players[q];
+            let namenode= document.createTextNode(pname+",");
+            gbox.appendChild(namenode);
+        }
+
+        gameList.appendChild(gbox);
+    }
+}
+
+
+view_data = function(){
+    fetch("/view_games",{
+        method:"GET",
+        headers:{
+            "Content-Type":"application/json"
+        },
+    }).then(response => response.json())
+        .catch(e=>console.log("View Error:"+ e))
+        .then(res=> showData(res));
+}
+
+onload = view_data;
+setInterval(view_data,5000);
+
 
 
     </script>

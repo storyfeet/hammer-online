@@ -78,7 +78,7 @@ fn new_user(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->io::Resul
 
 
 fn main() {
-    rocket::ignite().mount("/",routes![index,pre_game::new_game,pre_game::join_game,login,new_user])
+    rocket::ignite().mount("/",routes![index,pre_game::view_games,pre_game::join_game,login,new_user])
         .manage(Mutex::new("Hello".to_string()))
         .manage(Session::new())
         .launch();
