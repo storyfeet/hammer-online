@@ -12,6 +12,7 @@ pub struct PreGames(Mutex<Vec<PreGame>>);
 pub struct PreGame{
     name:String,
     players:Vec<String>,
+    gid:u64,
 }
 
 impl PreGames {
@@ -41,6 +42,7 @@ impl PreGames {
         let pg = PreGame{
             name:gname,
             players:vec![pname],
+            gid:0,
         };
         ar.push(pg);
         Ok((*ar).clone())
@@ -87,5 +89,26 @@ fn leave_game(state:State<Session>,cookies:Cookies)->Result<Json<Vec<PreGame>>,S
 fn view_games(state:State<Session>)->Result<Json<Vec<PreGame>>,SCServerErr>{
     let sess = state.inner();
     Ok(Json(sess.pre_games.view()?))
+}
+
+#[get("/begin_game")]
+fn begin_game(state:State<Session>)->Result<Json<Vec<PreGame>>,SCServerErr>{
+    let sess = state.inner();
+    let user = sess.logins.user_from_cookie(cookies)?;
+
+    let ar = sess.pre_games.lock().unwrap()?;
+    for pg in ar {
+        if pg.players.len() == 0 { continue}//should not be possible
+        if pg.players[0] == user {
+            loop {
+                let n = //TODO make rand to add and then insert, return goor once insert works. 
+            sess.active.insert(/ 
+            }
+        }
+    }
+
+    Ok(Json(ar.clone()))
+
+
 }
 

@@ -7,6 +7,8 @@ extern crate rocket;
 extern crate sqlite;
 extern crate bcrypt;
 extern crate rocket_contrib; //Consider #[macro_use]
+extern crate arc_map;
+extern crate shoehorn_circle;
 
 #[macro_use] extern crate serde_derive;
 

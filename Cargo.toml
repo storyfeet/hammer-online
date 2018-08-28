@@ -16,5 +16,6 @@ bcrypt = "0.2.0"
 
 card_deck = {path="../../mlibs/card_deck/"} 
 arc_map = {path="../../mlibs/arc_map/"}
+shoehorn_circle = {path="../../games/shoehorn_circle/"}
 
 

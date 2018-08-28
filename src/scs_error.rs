@@ -4,6 +4,7 @@ use self::SCServerErr::*;
 use bcrypt::BcryptError;
 use std::sync::PoisonError;
 use std::num::ParseIntError;
+use shoehorn_circle::ScErr;
 
 
 #[derive(Debug)]
@@ -14,9 +15,9 @@ pub enum SCServerErr {
     NoUser,
     PasswordFail,
     MutexPoisoned,
-    ItemExistsAlready,
     NoCookie,
     ParseErr,
+    GameErr(ScErr),
 }
 
 impl From<sqlite::Error> for SCServerErr {
@@ -39,5 +40,11 @@ impl<T> From<PoisonError<T>> for SCServerErr{
 impl From<ParseIntError> for SCServerErr{
     fn from(_:ParseIntError)->Self{
         ParseErr
+    }
+}
+
+impl From<ScErr> for SCServerErr{
+    fn from(e:ScErr)->Self{
+        GameErr(e)
     }
 }
