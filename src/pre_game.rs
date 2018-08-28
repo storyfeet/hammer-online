@@ -31,6 +31,9 @@ impl PreGames {
                 found = true;
             }
         }
+
+        ar.retain(|pg|! pg.players.is_empty());
+
         if found {
             return Ok((*ar).clone())
         }
@@ -40,6 +43,15 @@ impl PreGames {
             players:vec![pname],
         };
         ar.push(pg);
+        Ok((*ar).clone())
+    }
+
+    pub fn leave_game(&self,pname:String)->Result<Vec<PreGame>,SCServerErr>{
+        let mut ar = self.0.lock()?;
+        for mut pg in (&mut *ar).into_iter() {
+            pg.players.retain(|p|p != &pname);
+        }
+        ar.retain(|pg|! pg.players.is_empty());
         Ok((*ar).clone())
     }
 
@@ -55,14 +67,20 @@ fn join_game(gname:Json<String>,state:State<Session>,cookies:Cookies)->Result<Js
     let sess = state.inner();
     let gname = gname.into_inner();
 
-    let uid:u64 = cookies.get("user_id").ok_or(SCServerErr::NoCookie)?.value().parse()?;
-    let user = sess.logins.get_user(uid).ok_or(SCServerErr::NoUser)?;
+    let user = sess.logins.user_from_cookie(cookies)?;
 
     let res = sess.pre_games.join_game(gname,user.username)?;
 
     Ok(Json(
         res
     ))
+}
+
+#[post("/leave_game")]
+fn leave_game(state:State<Session>,cookies:Cookies)->Result<Json<Vec<PreGame>>,SCServerErr>{
+    let sess = state.inner();
+    let user = sess.logins.user_from_cookie(cookies)?;
+    Ok(Json(sess.pre_games.leave_game(user.username)?))
 }
 
 #[get("/view_games")]
