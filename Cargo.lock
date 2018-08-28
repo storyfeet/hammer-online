@@ -1,6 +1,6 @@
 [[package]]
 name = "arc_map"
-version = "0.1.2"
+version = "0.1.3"
 
 [[package]]
 name = "arrayvec"
@@ -540,7 +540,7 @@ dependencies = [
 name = "shoehorn_server"
 version = "0.1.0"
 dependencies = [
- "arc_map 0.1.2",
+ "arc_map 0.1.3",
  "bcrypt 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "card_deck 0.1.7",
  "rand 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",

@@ -5,6 +5,7 @@ use bcrypt::BcryptError;
 use std::sync::PoisonError;
 use std::num::ParseIntError;
 use shoehorn_circle::ScErr;
+use arc_map::AMapErr;
 
 
 #[derive(Debug)]
@@ -17,6 +18,7 @@ pub enum SCServerErr {
     MutexPoisoned,
     NoCookie,
     ParseErr,
+    MapErr(AMapErr),
     GameErr(ScErr),
 }
 
@@ -48,3 +50,10 @@ impl From<ScErr> for SCServerErr{
         GameErr(e)
     }
 }
+
+impl From<AMapErr> for SCServerErr{
+    fn from(e:AMapErr)->Self{
+        MapErr(e)
+    }
+}
+

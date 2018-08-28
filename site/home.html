@@ -64,7 +64,14 @@ function leave_game(){
     }).then(response => response.json())
         .catch(e=>console.log("Hello Error:"+ e))
         .then(res=> showGameList(res));
+}
 
+function begin_game(){
+    fetch("/begin_game",{
+        method:"POST",
+    }).then(rp => rp.json())
+        .catch(e=>console.log("begin err:" +e))
+        .then(showGameList);
 }
 
 
@@ -89,12 +96,16 @@ function showGameList(d){
         
         if ((has_user == 0 )&&(gm.players.length > 1)){ //is leader
             let bbutt = document.createElement("button");
-            //TODO add function
+            bbutt.onclick = begin_game;
             bbutt.innerHTML = "Begin";
             gbox.appendChild(bbutt);
         }
         
         if (has_user >= 0){ //is member
+            if (gm.gid !== 0) {    
+                console.log("Goodbye");
+                window.location.href = "play";
+            }
             let lbutt = document.createElement("button");
             lbutt.onclick = leave_game;
             lbutt.innerHTML = "Leave";

@@ -4,6 +4,10 @@ use rocket::http::Cookies;
 use rocket_contrib::Json;
 use session::Session;
 use scs_error::SCServerErr;
+use rand::{thread_rng,Rng};
+
+
+use shoehorn_circle::{Game,supply::Supply};
 
 #[derive(Serialize,Debug)]
 pub struct PreGames(Mutex<Vec<PreGame>>);
@@ -91,22 +95,29 @@ fn view_games(state:State<Session>)->Result<Json<Vec<PreGame>>,SCServerErr>{
     Ok(Json(sess.pre_games.view()?))
 }
 
-#[get("/begin_game")]
-fn begin_game(state:State<Session>)->Result<Json<Vec<PreGame>>,SCServerErr>{
+#[post("/begin_game")]
+fn begin_game(state:State<Session>,cookies:Cookies)->Result<Json<Vec<PreGame>>,SCServerErr>{
     let sess = state.inner();
     let user = sess.logins.user_from_cookie(cookies)?;
 
-    let ar = sess.pre_games.lock().unwrap()?;
-    for pg in ar {
+    let mut ar = sess.pre_games.0.lock()?;
+    'outer: for pg in &mut (*ar) {
         if pg.players.len() == 0 { continue}//should not be possible
-        if pg.players[0] == user {
+        if pg.players[0] == user.username {
             loop {
-                let n = //TODO make rand to add and then insert, return goor once insert works. 
-            sess.active.insert(/ 
+                let n = thread_rng().gen::<u64>();
+                if sess.active.insert(
+                                n,
+                                Game::build(Supply::new(sess.cards.clone()))
+                                    .player_names(pg.players.clone())
+                                    .done()
+                            )? {
+                    pg.gid = n;
+                    break 'outer;
+                }
             }
         }
     }
-
     Ok(Json(ar.clone()))
 
 

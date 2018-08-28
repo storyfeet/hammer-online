@@ -87,7 +87,7 @@ fn new_user(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->Redirect{
 
 
 fn main() {
-    rocket::ignite().mount("/",routes![index,pre_game::view_games,pre_game::join_game,pre_game::leave_game,login,new_user,static_site])
+    rocket::ignite().mount("/",routes![index,pre_game::view_games,pre_game::join_game,pre_game::leave_game,pre_game::begin_game,login,new_user,static_site])
         .manage(Mutex::new("Hello".to_string()))
         .manage(Session::new())
         .launch();
