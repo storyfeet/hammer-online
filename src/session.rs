@@ -9,7 +9,7 @@ pub struct Session{
     pub logins:Logins,
     pub pre_games:PreGames,
     pub cards:Arc<card_set::CardSet>,
-    pub active:ArcMap<u64,Game>,
+    pub active:ArcMap<u32,Game>,
 }
 
 impl Session{

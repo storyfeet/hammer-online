@@ -16,7 +16,18 @@ pub struct PreGames(Mutex<Vec<PreGame>>);
 pub struct PreGame{
     name:String,
     players:Vec<String>,
-    gid:u64,
+    gid:Option<u32>,
+}
+
+//for use in impl Pregames
+fn locked_in(v:&Vec<PreGame>,pname:&str)->bool{
+    for pg in v {
+        if pg.gid == None {continue};
+        if let Some(_) = pg.players.iter().find(|p|*p == pname) {
+            return true
+        }
+    }
+    false
 }
 
 impl PreGames {
@@ -24,8 +35,15 @@ impl PreGames {
         PreGames(Mutex::new(Vec::new()))
     }
 
+
+
     pub fn join_game(&self,gname:String,pname:String)->Result<Vec<PreGame>,SCServerErr>{
         let mut ar = self.0.lock()?;
+
+        if locked_in(&mut ar, &pname) {
+            return Ok((*ar).clone());
+        }
+
         let mut found = false; 
 
         for mut pg in (&mut *ar).into_iter() {
@@ -46,7 +64,7 @@ impl PreGames {
         let pg = PreGame{
             name:gname,
             players:vec![pname],
-            gid:0,
+            gid:None,
         };
         ar.push(pg);
         Ok((*ar).clone())
@@ -54,6 +72,11 @@ impl PreGames {
 
     pub fn leave_game(&self,pname:String)->Result<Vec<PreGame>,SCServerErr>{
         let mut ar = self.0.lock()?;
+
+        if locked_in(&mut ar, &pname) {
+            return Ok((*ar).clone());
+        }
+
         for mut pg in (&mut *ar).into_iter() {
             pg.players.retain(|p|p != &pname);
         }
@@ -63,6 +86,19 @@ impl PreGames {
 
     pub fn view(&self)->Result<Vec<PreGame>,SCServerErr>{
         Ok( (*self.0.lock()?).clone())
+    }
+
+    pub fn get_gid(&self,pname:&str)->Option<u32>{
+        let ar = self.0.lock().unwrap();
+        for gm in &*ar {
+            if gm.gid == None {
+                continue;
+            }
+            if let Some(_) = gm.players.iter().find(|p| *p == pname){
+                return gm.gid;
+            }
+        }
+        return None
     }
 
 }
@@ -105,14 +141,14 @@ fn begin_game(state:State<Session>,cookies:Cookies)->Result<Json<Vec<PreGame>>,S
         if pg.players.len() == 0 { continue}//should not be possible
         if pg.players[0] == user.username {
             loop {
-                let n = thread_rng().gen::<u64>();
+                let n = thread_rng().gen::<u32>();
                 if sess.active.insert(
                                 n,
                                 Game::build(Supply::new(sess.cards.clone()))
                                     .player_names(pg.players.clone())
                                     .done()
                             )? {
-                    pg.gid = n;
+                    pg.gid = Some(n);
                     break 'outer;
                 }
             }

@@ -102,9 +102,10 @@ function showGameList(d){
         }
         
         if (has_user >= 0){ //is member
-            if (gm.gid !== 0) {    
+            if (gm.gid !==null ) {    
+                console.log("GID  = ",gm.gid);
                 console.log("Goodbye");
-                window.location.href = "play";
+                window.location.href = "play.html";
             }
             let lbutt = document.createElement("button");
             lbutt.onclick = leave_game;
