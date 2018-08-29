@@ -14,10 +14,12 @@ pub struct Session{
 
 impl Session{
     pub fn new()->Self{
+        let c = Arc::new(card_set::load("site/cards/cards.lz").unwrap()); //TODO allow config
+        //println!("Cards = {:?}",c);
         Session{
             logins:Logins::new(),
             pre_games:PreGames::new(),
-            cards:Arc::new(card_set::load("site/cards/cards.lz").unwrap()), //TODO allow config 
+            cards:c,
             active:ArcMap::new(),
         }
     }

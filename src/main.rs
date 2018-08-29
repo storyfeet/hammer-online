@@ -30,6 +30,7 @@ mod scs_error;
 
 mod pre_game;
 
+mod active;
 
 
 
@@ -48,8 +49,10 @@ fn static_site(path:String)->io::Result<NamedFile>{
 #[post("/login", data="<cred>")]
 fn login(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->Redirect{
 
+
     let s = state.inner();
     let cred = cred.into_inner();
+
 
     println!("Login happening");
     let uid = match DbUser::get(cred.clone()){
@@ -87,7 +90,14 @@ fn new_user(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->Redirect{
 
 
 fn main() {
-    rocket::ignite().mount("/",routes![index,pre_game::view_games,pre_game::join_game,pre_game::leave_game,pre_game::begin_game,login,new_user,static_site])
+    rocket::ignite().mount("/",routes![
+                                index,login,new_user,static_site,
+                                pre_game::view_games,
+                                pre_game::join_game,
+                                pre_game::leave_game,
+                                pre_game::begin_game,
+                                active::show_from, 
+                            ])
         .manage(Mutex::new("Hello".to_string()))
         .manage(Session::new())
         .launch();

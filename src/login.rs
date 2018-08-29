@@ -82,7 +82,7 @@ impl Logins{
         map.get(&id).map(|x| (x).clone())
     }
 
-    pub fn user_from_cookie(&self,ck:Cookies)->Result<DbUser,SCServerErr>{
+    pub fn user_from_cookie(&self,ck:&Cookies)->Result<DbUser,SCServerErr>{
         let uid:u64 = ck.get("user_id").ok_or(SCServerErr::NoCookie)?.value().parse()?;
         self.get_user(uid).ok_or(SCServerErr::NoUser)
     }

@@ -17,6 +17,19 @@
         <script src="/util.js"></script>
         <script>
 
+window.onload = function() {
+    fetch("/game_after",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(0)
+    }).then(response => response.json())
+        .catch(e=>console.log("load Error:"+ e))
+        .then(res=> console.log("load success:",res));
+}
+
+
         </script>
 
 

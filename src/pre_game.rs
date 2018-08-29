@@ -109,7 +109,7 @@ fn join_game(gname:Json<String>,state:State<Session>,cookies:Cookies)->Result<Js
     let sess = state.inner();
     let gname = gname.into_inner();
 
-    let user = sess.logins.user_from_cookie(cookies)?;
+    let user = sess.logins.user_from_cookie(&cookies)?;
 
     let res = sess.pre_games.join_game(gname,user.username)?;
 
@@ -121,7 +121,7 @@ fn join_game(gname:Json<String>,state:State<Session>,cookies:Cookies)->Result<Js
 #[post("/leave_game")]
 fn leave_game(state:State<Session>,cookies:Cookies)->Result<Json<Vec<PreGame>>,SCServerErr>{
     let sess = state.inner();
-    let user = sess.logins.user_from_cookie(cookies)?;
+    let user = sess.logins.user_from_cookie(&cookies)?;
     Ok(Json(sess.pre_games.leave_game(user.username)?))
 }
 
@@ -134,7 +134,7 @@ fn view_games(state:State<Session>)->Result<Json<Vec<PreGame>>,SCServerErr>{
 #[post("/begin_game")]
 fn begin_game(state:State<Session>,cookies:Cookies)->Result<Json<Vec<PreGame>>,SCServerErr>{
     let sess = state.inner();
-    let user = sess.logins.user_from_cookie(cookies)?;
+    let user = sess.logins.user_from_cookie(&cookies)?;
 
     let mut ar = sess.pre_games.0.lock()?;
     'outer: for pg in &mut (*ar) {
@@ -144,7 +144,7 @@ fn begin_game(state:State<Session>,cookies:Cookies)->Result<Json<Vec<PreGame>>,S
                 let n = thread_rng().gen::<u32>();
                 if sess.active.insert(
                                 n,
-                                Game::build(Supply::new(sess.cards.clone()))
+                                Game::build(Supply::from_map(sess.cards.clone()))
                                     .player_names(pg.players.clone())
                                     .done()
                             )? {
