@@ -1,7 +1,7 @@
 let player_mod = {};
 
 
-player_mod.newPlayer = function(name,par_div){
+player_mod.newPlayer = function(name,par_div,rooter){
     let view = document.createElement("div");
     view.classList.add("player_box");
 
@@ -55,7 +55,20 @@ player_mod.newPlayer = function(name,par_div){
     res.showMessage = function(m){
         res.mbox.innerHTML = m;
     }
+
     res.dropCard = function(c){
+        for (p in res.cards){
+            let rc = res.cards[p];
+            if (rc.card.name !== c.name )continue;
+            if (rc.card.kind !== c.kind )continue;
+            
+            let dex = res.toDrop.indexOf(c.kind);
+            if (dex !== -1)res.toDrop.splice(dex,1);
+
+            rc.view.parentNode.removeChild(rc.view);
+            res.cards.splice(p,1);
+            return;
+        }
     }
 
     let drops_selected = function(){
@@ -81,7 +94,7 @@ player_mod.newPlayer = function(name,par_div){
                 dbutt = document.createElement("button");
                 dbutt.innerHTML = "Drop Cards";
                 dbutt.onclick = ()=> {
-                    console.log("Dropping", res.getSelected());
+                    rooter.drop_cards(res.getSelected().map(r=>r.card));
                 }
                 mbox.appendChild(dbutt);
                 return;

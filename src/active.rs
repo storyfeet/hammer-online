@@ -34,7 +34,7 @@ fn show_from(a_from:Json<usize>,state:State<Session>,mut ck:Cookies)->Result<Jso
 
 #[derive(Clone,Serialize,Deserialize,PartialEq,Debug)]
 struct DoReq {
-    last:usize,
+    from:usize,
     requests:Vec<RequestType>,
 }
 
@@ -57,7 +57,7 @@ fn request_actions(doreq:Json<DoReq>,state:State<Session>,ck:Cookies)->Result<Js
             };
             gm.player_action(rq)?;
         }
-        Ok(gm.since(doreq.last).to_vec())
+        Ok(gm.since(doreq.from).to_vec())
     })?;
 
     Ok(Json(res?))
