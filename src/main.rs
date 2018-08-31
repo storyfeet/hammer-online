@@ -12,6 +12,9 @@ extern crate shoehorn_circle;
 
 #[macro_use] extern crate serde_derive;
 
+
+use std::path::{Path,PathBuf};
+
 use rocket::{State};
 use rocket::http::{Cookies,Cookie};
 use rocket::request::{Form};
@@ -40,9 +43,9 @@ fn index()->io::Result<NamedFile>{
 }
 
 
-#[get("/<path>")]
-fn static_site(path:String)->io::Result<NamedFile>{
-    NamedFile::open(format!("site/{}",path))
+#[get("/<path..>")]
+fn static_site(path:PathBuf)->io::Result<NamedFile>{
+    NamedFile::open(Path::new("site/").join(path))
 }
 
 

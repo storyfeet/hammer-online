@@ -4,30 +4,60 @@
     <head>
         <meta charset="utf-8">
         <title>Shoehorn Circle - Game Finder</title>
+        <link rel="stylesheet" href="/css/play.css">
     </head>
     <body>
         <h1>Play</h1>
 
-        <form id="f1">
-            <input type="text" name="gname"/>
-            <input type="submit" value="Create a Game"/>
-        </form>
-        <div id="gamelist">
+        <div id="player_area">
         </div>
         <script src="/util.js"></script>
+        <script src="/js/player.js"></script>
         <script>
 
-window.onload = function() {
+game_actions = [];
+players = [];
+
+function processActions(acts){
+    for ( p in acts) {
+        let ac = acts[p];
+        for (q in ac) {
+            let ac_do = ac[q];
+            switch(q){
+                case "AddPlayer":
+                    players.push(player_mod.new(ac_do,document.getElementById("player_area")));
+                break;
+                case "PlayerDraw":
+                    let pl = players[ac_do[0]];
+                    pl.addCard(ac_do[1]);
+                    console.log("DRAWING:", players[ac_do[0]].name, ac_do);
+                break;    
+                
+            }
+        }
+        game_actions.push(acts[p]);
+    }
+}
+
+
+function getActions(){
+
     fetch("/game_after",{
         method:"POST",
         headers:{
             "Content-Type":"application/json"
         },
-        body:JSON.stringify(0)
+        body:JSON.stringify(game_actions.length)
     }).then(response => response.json())
         .catch(e=>console.log("load Error:"+ e))
-        .then(res=> console.log("load success:",res));
+        .then(processActions);
 }
+
+
+
+
+window.onload = getActions;
+
 
 
         </script>

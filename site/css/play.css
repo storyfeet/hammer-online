@@ -1,0 +1,37 @@
+
+.player_box{
+    border:1px solid black;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows:[name] 60px [role] 60px [trait] 60px [skill] 60px;
+    //flex-wrap:wrap;
+
+}
+
+.card_box{
+    min-width:200px;
+    margin:1px;
+    padding:2px;
+
+
+}
+
+.kind_Role{
+    background:#9999ff;
+    grid-row-start:role;
+}
+
+.kind_Goal{
+    background:#ff9999;
+    grid-row-start:role;
+}
+
+.kind_Trait{
+    background:#ff66bb;
+    grid-row-start:trait;
+}
+
+.kind_Skill{
+    background:#99ff99;
+    grid-row-start:skill;
+}
