@@ -11,10 +11,11 @@
 
         <div id="player_area">
         </div>
-        <script src="/util.js"></script>
+        <script src="/js/cookie.js"></script>
         <script src="/js/player.js"></script>
         <script>
 
+player_name = cookie_mod.get("user_name");
 game_actions = [];
 players = [];
 
@@ -25,7 +26,7 @@ function processActions(acts){
             let ac_do = ac[q];
             switch(q){
                 case "AddPlayer":
-                    players.push(player_mod.new(ac_do,document.getElementById("player_area")));
+                    players.push(player_mod.newPlayer(ac_do,document.getElementById("player_area")));
                 break;
                 case "PlayerDraw":
                     let pl = players[ac_do[0]];
@@ -36,6 +37,10 @@ function processActions(acts){
             }
         }
         game_actions.push(acts[p]);
+    }
+
+    for (p in players){
+        players[p].hint();
     }
 }
 
@@ -54,10 +59,7 @@ function getActions(){
 }
 
 
-
-
 window.onload = getActions;
-
 
 
         </script>

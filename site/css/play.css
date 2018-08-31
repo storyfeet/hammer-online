@@ -4,16 +4,18 @@
     display:grid;
     grid-template-columns:1fr 1fr 1fr 1fr 1fr;
     grid-template-rows:[name] 60px [role] 60px [trait] 60px [skill] 60px;
-    //flex-wrap:wrap;
 
 }
 
 .card_box{
-    min-width:200px;
+    //min-width:200px;
     margin:1px;
     padding:2px;
+}
 
-
+.selected{
+    font-size:large;
+    border:3px solid black;
 }
 
 .kind_Role{
@@ -34,4 +36,12 @@
 .kind_Skill{
     background:#99ff99;
     grid-row-start:skill;
+}
+
+.message_box{
+    grid-column-start:2;
+    grid-row-start:1;
+    grid-column-end:span 4;
+
+    background:#bbbbbb;
 }
