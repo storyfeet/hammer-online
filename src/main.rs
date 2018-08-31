@@ -99,6 +99,7 @@ fn main() {
                                 pre_game::join_game,
                                 pre_game::leave_game,
                                 pre_game::begin_game,
+                                active::request_actions,
                                 active::show_from, 
                             ])
         .manage(Mutex::new("Hello".to_string()))

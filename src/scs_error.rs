@@ -17,6 +17,7 @@ pub enum SCServerErr {
     PasswordFail,
     MutexPoisoned,
     NoCookie,
+    NoGame,
     ParseErr,
     MapErr(AMapErr),
     GameErr(ScErr),
