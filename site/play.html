@@ -7,9 +7,17 @@
         <link rel="stylesheet" href="/css/play.css">
     </head>
     <body>
-        <h1>Play</h1>
-
-        <div id="player_area">
+        <div id="content">
+            <h1>Play</h1>
+            <div id="chat_area">
+                <div id="dosaychat">
+                    <input type="text" id="dobar">
+                    <button>Do</button>
+                </div>
+                <div id="history_bar"></div>
+            </div>
+            <div id="player_area">
+            </div>
         </div>
         <script src="/js/qfetch.js"></script>
         <script src="/js/cookie.js"></script>
@@ -35,6 +43,43 @@ rooter.drop_cards = function(cds){
     qfetch_mod.jsonPost("/request_actions",dt,processActions);
 }
 
+function picElem(src,txt,...classes){
+    let res = document.createElement("div");
+    res.classList.add(...classes);
+    let pic = document.createElement("img");
+    pic.src = src;
+    let tx = document.createElement("p");
+    tx.innerHTML = txt;
+    res.appendChild(pic);
+    res.appendChild(tx);
+    return res;
+}
+
+
+
+function addHistory(ac){
+    console.log("ADDING HISTORY",ac);
+    let hbar = document.getElementById("history_bar");
+    let elem = document.createElement("p");
+    for (q in ac) {
+        let ac_do = ac[q];
+        elem.innerHTML = q + ":" + ac_do;
+        switch (q){
+            case "PlayerDraw":
+                elem = picElem("pics/draw_card.svg",ac_do[1].name,"event","player_" + ac_do[0],"kind_"+ac_do[1].kind);
+            break;
+            case "AddPlayer":
+                elem = picElem("pics/add_player.svg",ac_do,"event","player_"+ (players.length -1));
+            break;
+            case "DropCard":
+                elem = picElem("pics/drop_card.svg",ac_do[1].name,"event","player_" + ac_do[0],"kind_"+ac_do[1].kind);
+            break;
+        }
+    }
+    hbar.insertBefore(elem,hbar.childNodes[0]);
+}
+
+
 
 function processActions(acts){
     for ( p in acts) {
@@ -57,7 +102,9 @@ function processActions(acts){
                 break;
             }
         }
-        game_actions.push(acts[p]);
+        game_actions.push(ac);
+        addHistory(ac);
+        
     }
 
     for (p in players){

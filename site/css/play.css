@@ -1,10 +1,22 @@
 
+#content{
+    display:grid;
+    grid-template-columns:3fr 2fr;
+    grid-template-rows:60px 1fr 60px;
+    height:97vh;
+    background:#dddddd;
+}
+
+
+#player_area{
+    overflow-y:scroll;
+}
+
 .player_box{
     border:1px solid black;
     display:grid;
     grid-template-columns:1fr 1fr 1fr 1fr 1fr;
     grid-template-rows:[name] 60px [role] 60px [trait] 60px [skill] 60px;
-
 }
 
 .card_box{
@@ -42,6 +54,49 @@
     grid-column-start:2;
     grid-row-start:1;
     grid-column-end:span 4;
-
     background:#bbbbbb;
 }
+
+
+
+#chat_area{
+    grid-column-start:2;
+    grid-row-start:1;
+    grid-row-end:span 2;
+}
+
+
+.event img {
+    width:30px;
+    float:left;
+}
+
+#history_bar{
+    height:100%;
+    overflow-y:scroll;
+}
+
+.player_0{
+    border:3px solid red;
+}
+
+.player_1{
+    border:3px solid green;
+}
+
+.player_2{
+    margin:3px solid blue;
+}
+
+.player_3{
+    margin:3px solid fuchsia;
+}
+
+.player_4{
+    margin:3px solid aqua;
+}
+
+.player_5{
+    margin:3px solid yellow;
+}
+

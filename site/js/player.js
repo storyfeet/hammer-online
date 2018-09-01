@@ -1,9 +1,12 @@
-let player_mod = {};
+let player_mod = {
+    currnum : -1
+}
 
 
 player_mod.newPlayer = function(name,par_div,rooter){
     let view = document.createElement("div");
-    view.classList.add("player_box");
+    player_mod.currnum ++;
+    view.classList.add("player_box","player_"+player_mod.currnum);
 
     let namebox = document.createElement("h2");
     namebox.innerHTML = name;
