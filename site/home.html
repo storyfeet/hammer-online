@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="/css/home.css">
         <title>Shoehorn Circle - Game Finder</title>
     </head>
     <body>
@@ -11,7 +12,14 @@
             <input type="text" name="gname"/>
             <input type="submit" value="Create a Game"/>
         </form>
-        <div id="gamelist">
+        <h2>My Games</h2>
+        <div id="my_list">
+        </div>
+        <h2>Open Games</h2>
+        <div id="open_list">
+        </div><div style="clear:both;"></div>
+        <h2>Live Games</h2>
+        <div id="live_list">
         </div>
 
     <script src="/js/cookie.js"></script>
@@ -74,38 +82,61 @@ function begin_game(){
         .then(showGameList);
 }
 
+function get_cleared(id){
+    let res = document.getElementById(id);
+    while(res.hasChildNodes()){
+        res.removeChild(res.lastChild);
+    }
+    return res;
+}
+
+function q_child(kind,innerH,...classes){
+    let res = document.createElement(kind);
+    res.innerHTML = innerH;
+    res.classList.add(...classes);
+    return res;
+}
 
 
 function showGameList(d){
-    let gameList = document.getElementById("gamelist");
-    gameList.innerHTML = "";
+    let openList = get_cleared("open_list");
+    let myList = get_cleared("my_list");
+    let liveList = get_cleared("live_list");
+
     for( p in d){
         let gm = d[p];
-        let gbox = document.createElement("div"); 
-        let nm = document.createTextNode(gm.name+":");
-        gbox.appendChild(nm);
+        let ingame = gm.players.indexOf(username) ;
 
-        let has_user = -1;
-        
-        for (q in gm.players){
-            let pname = gm.players[q];
-            if (pname === username)has_user = q;
-            let namenode= document.createTextNode(pname+",");
-            gbox.appendChild(namenode);
+        if (gm.gid!== null){
+            let r = document.createElement("a");
+            r.href= `/play/${gm.gid}`; 
+            r.innerHTML = `${gm.name} : ${gm.gid}`;
+            if (ingame >=0){
+                myList.appendChild(r);        
+            }else{
+                liveList.appendChild(r);
+            }
+            continue;
         }
         
-        if ((has_user == 0 )&&(gm.players.length > 1)){ //is leader
+        let gbox = document.createElement("div");
+        gbox.classList.add("open_game");
+        gbox.appendChild(q_child("h3",gm.name));
+
+        for (p in gm.players){
+            gbox.appendChild(q_child("p",gm.players[p]));
+        }
+
+        if ((ingame == 0 )&&(gm.players.length > 1)){ //is leader
             let bbutt = document.createElement("button");
             bbutt.onclick = begin_game;
             bbutt.innerHTML = "Begin";
             gbox.appendChild(bbutt);
         }
         
-        if (has_user >= 0){ //is member
+        if (ingame >= 0){ //is member
             if (gm.gid !==null ) {    
                 console.log("GID  = ",gm.gid);
-                console.log("Goodbye");
-                window.location.href = "play.html";
             }
             let lbutt = document.createElement("button");
             lbutt.onclick = leave_game;
@@ -118,7 +149,7 @@ function showGameList(d){
             gbox.appendChild(jbutt);
         }
 
-        gameList.appendChild(gbox);
+        openList.appendChild(gbox);
     }
 }
 
