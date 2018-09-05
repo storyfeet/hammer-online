@@ -43,7 +43,7 @@ fn index()->io::Result<NamedFile>{
 }
 
 
-#[get("/<path..>")]
+#[get("/<path..>",rank=2)]
 fn static_site(path:PathBuf)->io::Result<NamedFile>{
     NamedFile::open(Path::new("site/").join(path))
 }
@@ -99,8 +99,9 @@ fn main() {
                                 pre_game::join_game,
                                 pre_game::leave_game,
                                 pre_game::begin_game,
+                                active::play,
                                 active::request_actions,
-                                active::show_from, 
+                                active::game_after, 
                             ])
         .manage(Mutex::new("Hello".to_string()))
         .manage(Session::new())

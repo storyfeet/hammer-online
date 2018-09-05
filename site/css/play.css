@@ -85,18 +85,18 @@
 }
 
 .player_2{
-    margin:3px solid blue;
+    border:3px solid blue;
 }
 
 .player_3{
-    margin:3px solid fuchsia;
+    border:3px solid fuchsia;
 }
 
 .player_4{
-    margin:3px solid aqua;
+    border:3px solid aqua;
 }
 
 .player_5{
-    margin:3px solid yellow;
+    border:3px solid yellow;
 }
 

@@ -6,6 +6,7 @@ qfetch_mod.jsonPost = function(url,data,callback){
     console.log(jsdt);
     fetch(url,{
         method:"POST",
+        credentials: "same-origin",
         headers:{
             "Content-Type":"application/json"
         },

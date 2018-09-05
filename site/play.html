@@ -30,6 +30,7 @@
 player_name = cookie_mod.get("user_name");
 game_actions = [];
 players = [];
+gid = location.pathname.replace("/play/","");
 
 let rooter = {};
 
@@ -40,7 +41,7 @@ rooter.drop_cards = function(cds){
     let dt = { from:game_actions.length,
                 requests:reqs}; 
 
-    qfetch_mod.jsonPost("/request_actions",dt,processActions);
+    qfetch_mod.jsonPost("/request_actions/"+gid,dt,processActions);
 }
 
 function picElem(src,txt,...classes){
@@ -66,13 +67,13 @@ function addHistory(ac){
         elem.innerHTML = q + ":" + ac_do;
         switch (q){
             case "PlayerDraw":
-                elem = picElem("pics/draw_card.svg",ac_do[1].name,"event","player_" + ac_do[0],"kind_"+ac_do[1].kind);
+                elem = picElem("/pics/draw_card.svg",ac_do[1].name,"event","player_" + ac_do[0],"kind_"+ac_do[1].kind);
             break;
             case "AddPlayer":
-                elem = picElem("pics/add_player.svg",ac_do,"event","player_"+ (players.length -1));
+                elem = picElem("/pics/add_player.svg",ac_do,"event","player_"+ (players.length -1));
             break;
             case "DropCard":
-                elem = picElem("pics/drop_card.svg",ac_do[1].name,"event","player_" + ac_do[0],"kind_"+ac_do[1].kind);
+                elem = picElem("/pics/drop_card.svg",ac_do[1].name,"event","player_" + ac_do[0],"kind_"+ac_do[1].kind);
             break;
         }
     }
@@ -115,7 +116,7 @@ function processActions(acts){
 
 function getActions(){
 
-    qfetch_mod.jsonPost("/game_after",game_actions.length,processActions);
+    qfetch_mod.jsonPost("/game_after/"+gid,game_actions.length,processActions);
 }
 
 
