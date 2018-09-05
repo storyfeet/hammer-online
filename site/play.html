@@ -114,10 +114,25 @@ function processActions(acts){
 }
 
 
-function getActions(){
+function action_getter(){
 
-    qfetch_mod.jsonPost("/game_after/"+gid,game_actions.length,processActions);
+    //TODO Here
+    let action_wait = 2000;
+    let getActions = function(){
+        console.log("wait = "+action_wait);
+        qfetch_mod.jsonPost("/game_after/"+gid,game_actions.length,ac=>{
+            action_wait += 1000;
+            if (ac.length >0){
+                action_wait = 2000
+            }
+            processActions(ac);
+        });
+
+        setInterval(getActions,action_wait);
+    }
 }
+
+
 
 
 window.onload = getActions;
