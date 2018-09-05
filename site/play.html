@@ -29,6 +29,7 @@
 
 player_name = cookie_mod.get("user_name");
 game_actions = [];
+refresh_wait = 2000;
 players = [];
 gid = location.pathname.replace("/play/","");
 
@@ -83,6 +84,10 @@ function addHistory(ac){
 
 
 function processActions(acts){
+    if (acts.length >0){
+        refresh_wait = 2000
+    }
+
     for ( p in acts) {
         let ac = acts[p];
         for (q in ac) {
@@ -114,29 +119,27 @@ function processActions(acts){
 }
 
 
-function action_getter(){
+function getActions(){
+    qfetch_mod.jsonPost(
+        "/game_after/"+gid,
+        game_actions.length,
+        processActions
+    );
+    
+};
 
-    //TODO Here
-    let action_wait = 2000;
-    let getActions = function(){
-        console.log("wait = "+action_wait);
-        qfetch_mod.jsonPost("/game_after/"+gid,game_actions.length,ac=>{
-            action_wait += 1000;
-            if (ac.length >0){
-                action_wait = 2000
-            }
-            processActions(ac);
-        });
-
-        setInterval(getActions,action_wait);
-    }
+function repeat_getActions(){
+    console.log("Refresh Wait = " + refresh_wait);
+    setTimeout(repeat_getActions,refresh_wait);
+    refresh_wait += 1000;
+    getActions();
 }
 
 
 
 
-window.onload = getActions;
 
+window.onload = repeat_getActions();
 
         </script>
 
