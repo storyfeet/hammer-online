@@ -14,7 +14,7 @@ pub struct Session{
 
 impl Session{
     pub fn new()->Self{
-        let c = Arc::new(card_set::load("site/cards/cards.lz").unwrap()); //TODO allow config
+        let c = Arc::new(card_set::CardSet::load("site/cards/cards.lz").unwrap()); //TODO allow config
         //println!("Cards = {:?}",c);
         Session{
             logins:Logins::new(),

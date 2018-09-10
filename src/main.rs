@@ -18,7 +18,10 @@ use std::path::{Path,PathBuf};
 use rocket::{State};
 use rocket::http::{Cookies,Cookie};
 use rocket::request::{Form};
+use rocket_contrib::Json;
 use rocket::response::{NamedFile,Redirect};
+
+use shoehorn_circle::{card_set};
 
 use std::io;
 use std::sync::Mutex;
@@ -46,6 +49,12 @@ fn index()->io::Result<NamedFile>{
 #[get("/<path..>",rank=2)]
 fn static_site(path:PathBuf)->io::Result<NamedFile>{
     NamedFile::open(Path::new("site/").join(path))
+}
+
+#[get("/cardset")]
+fn cardset(sess:State<Session>)->Json<&card_set::CardSet>{
+    let sess = sess.inner();
+    Json(&(*sess.cards))
 }
 
 
@@ -94,7 +103,7 @@ fn new_user(cred:Form<Cred>,state:State<Session>,mut cookies:Cookies)->Redirect{
 
 fn main() {
     rocket::ignite().mount("/",routes![
-                                index,login,new_user,static_site,
+                                index,login,new_user,static_site,cardset,
                                 pre_game::view_games,
                                 pre_game::join_game,
                                 pre_game::leave_game,
