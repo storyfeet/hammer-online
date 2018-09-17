@@ -18,9 +18,11 @@
             </div>
             <div id="player_area">
             </div>
+            <div id="growth_row"></div>
         </div>
         <script src="/js/qfetch.js"></script>
         <script src="/js/cookie.js"></script>
+        <script src="/js/card.js"></script>
         <script src="/js/player.js"></script>
         <script>
 
@@ -104,8 +106,17 @@ function processActions(acts){
                 case "DropCard":
                     pl = players[ac_do[0]];
                     pl.dropCard(ac_do[1]);
-                    console.log("Card Drop Processed");
+              //      console.log("Card Drop Processed");
                 break;
+                case "FillGrowth":
+                    console.log("Fillign Growth");
+                    let gdiv = document.getElementById("growth_row"); 
+                    let gcrd = card_mod.newCard(ac_do,rooter.card_set);
+                    console.log("Fillign Growth 2");
+                    gdiv.appendChild(gcrd.view);
+                break;
+                default:
+                    console.log("NOT PROCESSED", q,ac_do);
             }
         }
         game_actions.push(ac);
@@ -139,7 +150,12 @@ function repeat_getActions(){
 
 
 
-window.onload = repeat_getActions();
+window.onload = function(){
+    qfetch_mod.jsonGet("/cardset",function(r){
+        rooter.card_set = r;
+        repeat_getActions();
+    });
+}
 
         </script>
 

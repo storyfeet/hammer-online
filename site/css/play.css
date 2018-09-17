@@ -33,6 +33,7 @@
 .kind_Role{
     background:#9999ff;
     grid-row-start:role;
+    grid-row-end:span 2;
 }
 
 .kind_Goal{
@@ -74,6 +75,19 @@
 #history_bar{
     height:100%;
     overflow-y:scroll;
+}
+
+#growth_row{
+    padding:5px;
+    display:flex;
+    background:red;
+    grid-row-start:3;
+    grid-column-start:0;
+    grid-column-width:span 3;
+}
+
+#growth_row div{
+    width:100px;
 }
 
 .player_0{

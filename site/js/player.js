@@ -35,15 +35,11 @@ player_mod.newPlayer = function(name,par_div,rooter){
     }
 
     res.addCard = function(c) {
-        cview = document.createElement("div");
-        cview.appendChild(document.createTextNode(c.name));
-        cview.classList.add("card_box","kind_" + c.kind);
+        let crd = card_mod.newCard(c,rooter.card_set);
+        crd.view.onclick = select_card(crd);
 
-        let crd = {card:c,view:cview};
-
-        cview.onclick = select_card(crd);
         this.cards.push(crd);
-        this.view.appendChild(cview);
+        this.view.appendChild(crd.view);
     };
 
     res.getSelected = function(){
