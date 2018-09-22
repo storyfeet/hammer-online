@@ -78,6 +78,9 @@ function addHistory(ac){
             case "DropCard":
                 elem = picElem("/pics/drop_card.svg",ac_do[1].name,"event","player_" + ac_do[0],"kind_"+ac_do[1].kind);
             break;
+            case "FillGrowth":
+                elem = picElem("/pics/fill_growth.svg",ac_do.name,"event","kind_"+ac_do.kind);
+            break;
         }
     }
     hbar.insertBefore(elem,hbar.childNodes[0]);
@@ -109,10 +112,10 @@ function processActions(acts){
               //      console.log("Card Drop Processed");
                 break;
                 case "FillGrowth":
-                    console.log("Fillign Growth");
+                    console.log("Filling Growth");
                     let gdiv = document.getElementById("growth_row"); 
                     let gcrd = card_mod.newCard(ac_do,rooter.card_set);
-                    console.log("Fillign Growth 2");
+                    console.log("Filling Growth 2");
                     gdiv.appendChild(gcrd.view);
                 break;
                 default:

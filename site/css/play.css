@@ -19,6 +19,26 @@
     grid-template-rows:[name] 60px [role] 60px [trait] 60px [skill] 60px;
 }
 
+.hidden_player{
+    border:1px solid black;
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.hidden_player > div:first-child{
+    min-width:100px;
+}
+
+.hidden_player .card_box{
+    min-width:100px;
+    padding:5px;
+    
+}
+
+.hidden_player .message_box{
+    display:None;
+}
+
 .card_box{
     //min-width:200px;
     margin:1px;
@@ -66,10 +86,15 @@
     grid-row-end:span 2;
 }
 
-
+.event {
+    display:flex;
+}
 .event img {
     width:30px;
-    float:left;
+    //float:left;
+}
+.event p{
+    flex:10;
 }
 
 #history_bar{

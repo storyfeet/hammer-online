@@ -8,9 +8,14 @@ player_mod.newPlayer = function(name,par_div,rooter){
     player_mod.currnum ++;
     view.classList.add("player_box","player_"+player_mod.currnum);
 
-    let namebox = document.createElement("h2");
-    namebox.innerHTML = name;
+    let namebox = document.createElement("div");
+    namebox.innerHTML = "<h2>"+name+"</h2>";
     view.appendChild(namebox);
+
+    namebox.onclick = function(){
+        view.classList.toggle("player_box");
+        view.classList.toggle("hidden_player");
+    }
 
     let mbox = document.createElement("div");
     mbox.classList.add("message_box");
