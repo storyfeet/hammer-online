@@ -8,7 +8,7 @@
     </head>
     <body>
         <div id="content">
-            <h1>Play</h1>
+            <div id="hint_bar"></div>
             <div id="chat_area">
                 <div id="dosaychat">
                     <input type="text" id="dobar">
@@ -22,30 +22,40 @@
         </div>
         <script src="/js/qfetch.js"></script>
         <script src="/js/cookie.js"></script>
+        <script src="/js/action_bar.js"></script>
         <script src="/js/card.js"></script>
         <script src="/js/player.js"></script>
         <script>
 
 
+let rooter = {};
+rooter.request = function(acts){
+    let dt = {
+        from:game_actions.length,
+        requests:acts
+    };
+    qfetch_mod.jsonPost("/request_actions/"+gid,dt,processActions);
+}
 
 
 player_name = cookie_mod.get("user_name");
 game_actions = [];
+hint_bar= hint_mod.new(document.getElementById("hint_bar"),player_name,rooter);
 refresh_wait = 2000;
 players = [];
 gid = location.pathname.replace("/play/","");
 
-let rooter = {};
+
 
 rooter.drop_cards = function(cds){
     
     let reqs = cds.map(c => {return {DropCard:c}});
-
     let dt = { from:game_actions.length,
                 requests:reqs}; 
-
     qfetch_mod.jsonPost("/request_actions/"+gid,dt,processActions);
+
 }
+
 
 function picElem(src,txt,...classes){
     let res = document.createElement("div");
@@ -100,7 +110,7 @@ function processActions(acts){
             let pl = [];
             switch(q){
                 case "AddPlayer":
-                    players.push(player_mod.newPlayer(ac_do,document.getElementById("player_area"),rooter));
+                    players.push(player_mod.newPlayer(ac_do,document.getElementById("player_area"),hint_bar));
                 break;
                 case "PlayerDraw":
                     pl = players[ac_do[0]];
