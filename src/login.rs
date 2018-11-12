@@ -5,11 +5,12 @@ use bcrypt::{hash,verify};
 use rand::random;
 
 use rocket::http::Cookies;
+use serde_derive::{Deserialize};
 
 use sqlite;
 use sqlite::State;
 
-use scs_error::SCServerErr;
+use crate::scs_error::SCServerErr;
 
 
 const USER_DB:&str = "dbase/users.db";

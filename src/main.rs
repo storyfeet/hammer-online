@@ -1,18 +1,9 @@
-#![feature(plugin, decl_macro,custom_derive)]
+#![feature(plugin,custom_derive)]
 #![plugin(rocket_codegen)]
 
-extern crate card_deck;
-extern crate rand;
-extern crate rocket;
-extern crate sqlite;
-extern crate bcrypt;
-extern crate rocket_contrib; //Consider #[macro_use]
-extern crate arc_map;
-extern crate shoehorn_circle;
+//#[macro_use] extern crate serde_derive;
 
-#[macro_use] extern crate serde_derive;
-
-
+use serde_derive::{Serialize,Deserialize};
 use std::path::{Path,PathBuf};
 
 use rocket::{State};
@@ -27,9 +18,9 @@ use std::io;
 use std::sync::Mutex;
 
 mod login;
-use login::{DbUser,Cred};
+use crate::login::{DbUser,Cred};
 mod session;
-use session::Session;
+use crate::session::Session;
 
 mod scs_error;
 //use scs_error::SCServerErr;

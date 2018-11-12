@@ -1,7 +1,8 @@
 use std::sync::Arc;
 
-use login::Logins;
-use pre_game::PreGames;
+use crate::login::Logins;
+use crate::pre_game::PreGames;
+
 use arc_map::ArcMap;
 use shoehorn_circle::{Game,card_set};
 

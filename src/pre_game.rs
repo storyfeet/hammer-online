@@ -1,9 +1,11 @@
+use crate::session::Session;
+use crate::scs_error::SCServerErr;
+
 use std::sync::Mutex;
 use rocket::{State};
 use rocket::http::Cookies;
 use rocket_contrib::Json;
-use session::Session;
-use scs_error::SCServerErr;
+use serde_derive::{Serialize};
 use rand::{thread_rng,Rng};
 
 
@@ -46,7 +48,7 @@ impl PreGames {
 
         let mut found = false; 
 
-        for mut pg in (&mut *ar).into_iter() {
+        for pg in (&mut *ar).into_iter() {
             pg.players.retain(|p|p != &pname);
 
             if pg.name == gname {
@@ -77,7 +79,7 @@ impl PreGames {
             return Ok((*ar).clone());
         }
 
-        for mut pg in (&mut *ar).into_iter() {
+        for pg in (&mut *ar).into_iter() {
             pg.players.retain(|p|p != &pname);
         }
         ar.retain(|pg|! pg.players.is_empty());
