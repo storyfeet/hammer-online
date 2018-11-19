@@ -11,8 +11,10 @@
             <div id="hint_bar"></div>
             <div id="chat_area">
                 <div id="dosaychat">
-                    <input type="text" id="dobar">
-                    <button>Do</button>
+                    <input type="text" id="do_bar">
+                    <button onclick="do_say_click('Chat')">Chat</button>
+                    <button onclick="do_say_click('Say')">Say</button>
+                    <button onclick="do_say_click('Do')">Do</button>
                 </div>
                 <div id="history_bar"></div>
             </div>
@@ -44,6 +46,7 @@ hint_bar= hint_mod.new(document.getElementById("hint_bar"),player_name,rooter);
 refresh_wait = 2000;
 players = [];
 gid = location.pathname.replace("/play/","");
+
 
 
 
@@ -159,6 +162,14 @@ function repeat_getActions(){
     getActions();
 }
 
+
+function do_say_click(ac){
+    let tx = document.getElementById("do_bar");
+    let r_item = {};
+    r_item[ac] = tx.value;
+    rooter.request([r_item]);
+    
+}
 
 
 

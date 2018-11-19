@@ -103,7 +103,6 @@ fn main() {
                                 active::request_actions,
                                 active::game_after, 
                             ])
-        .manage(Mutex::new("Hello".to_string()))
         .manage(Session::new())
         .launch();
 }
