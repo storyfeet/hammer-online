@@ -55,7 +55,7 @@ fn request_actions(gid:String,doreq:Json<DoReq>,state:State<Session>,ck:Cookies)
         for r in doreq.requests{
             let rq = Request{
                 player_name:user.username.clone(),
-                act:r,
+                act:r.escape(),
             };
             gm.player_action(rq)?;
         }
